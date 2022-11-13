@@ -22,7 +22,8 @@ Clocky can be run via `clocky` or `python -m clocky`
 usage: clocky [-h] [-p] [-o OUTPUT] [-f FORMAT] [-a] [-v] [-q] [-V] [-g] ...
 
 A pseudo-port of GNU time to Python. You can look at the man page of time to
-get some info about the args here.
+get some info about the args here. Certain format codes are not supported and
+will return a ? in place of an actual value.
 
 positional arguments:
   cmd                   The command to time.
