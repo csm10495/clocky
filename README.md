@@ -1,25 +1,25 @@
-# Timey
+# Clocky
 
-Timey is a pseudo-port of GNU Time, written in Python. The output generally looks like `time`.
+Clocky is a pseudo-port of GNU Time, written in Python. The output generally looks like `time`.
 
 Certain format codes may not work exactly like they do in GNU `time`.
 
 # Installation
 
-This will install the timey cli:
+This will install the clocky cli:
 
 ```
-pip install timey
+pip install clocky
 ```
 
 # Usage
 
-Timey can be run via `timey` or `python -m timey`
+Clocky can be run via `clocky` or `python -m clocky`
 
 <!-- MARKDOWN-AUTO-DOCS:START (CODE:src=./help_output.txt) -->
 <!-- The below code snippet is automatically added from ./help_output.txt -->
 ```txt
-usage: timey [-h] [-p] [-o OUTPUT] [-f FORMAT] [-a] [-v] [-q] [-V] [-g] ...
+usage: clocky [-h] [-p] [-o OUTPUT] [-f FORMAT] [-a] [-v] [-q] [-V] [-g] ...
 
 A pseudo-port of GNU time to Python. You can look at the man page of time to
 get some info about the args here.
@@ -44,19 +44,19 @@ optional arguments:
                         status.
   -V, --version         Print version information on standard output, then
                         exit successfully.
-  -g                    A timey-specific extension. When set, tries to act
+  -g                    A clocky-specific extension. When set, tries to act
                         similar to gnu time in terms of output. Otherwise by
-                        default (without -f) timey acts like bash's time
+                        default (without -f) clocky acts like bash's time
                         command.
 ```
 <!-- MARKDOWN-AUTO-DOCS:END -->
 
 # Simple Example
 
-Timey can be used to time function execution (just like the time command):
+Clocky can be used to time function execution (just like the time command):
 
 ```
-> timey echo "Hello World"
+> clocky echo "Hello World"
 Hello World
 
 real    0m0.007s

@@ -255,12 +255,12 @@ def main():
         help="Print version information on standard output, then exit successfully.",
     )
 
-    # this is a timey extension to allow supporting a gnu-like mode
+    # this is a clocky extension to allow supporting a gnu-like mode
     parser.add_argument(
         "-g",
         dest="gnu_mode",
         action="store_true",
-        help="A timey-specific extension. When set, tries to act similar to gnu time in terms of output. Otherwise by default (without -f) timey acts like bash's time command.",
+        help="A clocky-specific extension. When set, tries to act similar to gnu time in terms of output. Otherwise by default (without -f) clocky acts like bash's time command.",
     )
 
     args = parser.parse_args()
@@ -272,7 +272,7 @@ def main():
 
     try:
         if args.version:
-            print(f"timey {__version__}", end="", file=output)
+            print(f"clocky {__version__}", end="", file=output)
         else:
             process_info = run(args.cmd, args.gnu_mode, quiet=args.quiet, output=output)
 

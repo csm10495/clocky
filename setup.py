@@ -13,12 +13,12 @@ from __init__ import __version__
 req = ["psutil"]
 
 setup(
-    name="timey",
+    name="clocky",
     author="csm10495",
     author_email="csm10495@gmail.com",
-    url="http://github.com/csm10495/timey",
+    url="http://github.com/csm10495/clocky",
     version=__version__,
-    packages=["timey"],
+    packages=["clocky"],
     license="MIT License",
     python_requires=">=3.8",
     long_description=open("README.md").read(),
@@ -32,7 +32,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.8",
     ],
-    entry_points={"console_scripts": ["timey = timey.__main__:main"]},
+    entry_points={"console_scripts": ["clocky = clocky.__main__:main"]},
     include_package_data=True,
     install_requires=req,
 )
