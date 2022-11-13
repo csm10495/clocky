@@ -14,7 +14,5 @@ pip install timey
 
 Timey can be run via `timey` or `python -m timey`
 
-```
 <!-- MARKDOWN-AUTO-DOCS:START (CODE:src=./help_output.txt) -->
 <!-- MARKDOWN-AUTO-DOCS:END -->
-```
