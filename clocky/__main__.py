@@ -36,6 +36,9 @@ class ProcessInfo:
     def get_sys_time(self) -> float:
         return self.last_cpu_time.system if self.last_cpu_time else 0
 
+    def get_percentage_of_cpu_this_job_got(self) -> int:
+        return int((self.get_user_time() + self.get_sys_time()) / self.run_time) * 100
+
     def get_max_resident_set_size_in_kilobytes(self) -> int:
         if not self.memory_infos:
             return 0
@@ -86,6 +89,37 @@ class ProcessInfo:
 
     def get_write_count(self) -> int:
         return self.last_io_counters.write_count if self.last_io_counters else 0
+
+    @classmethod
+    def get_page_size(cls) -> int:
+        return mmap.PAGESIZE
+
+    def __str__(self):
+        """Used for verbose output"""
+        return f"""Command being timed: {shlex.join(self.cmd)}
+        User time (seconds): {self.get_user_time():.2f}
+        System time (seconds): {self.get_sys_time():.2f}
+        Percent of CPU this job got: {self.get_percentage_of_cpu_this_job_got()}%
+        Elapsed (wall clock) time (h:mm:ss or m:ss): {seconds_to_time_str(self.run_time, gnu_elapsed_real_time=True)}
+        Average shared text size (kbytes): {self.get_avg_size_of_shared_text_space_in_kilobytes()}
+        Average unshared data size (kbytes): {self.get_avg_total_memory_usage_in_kilobytes()}
+        Average stack size (kbytes): {self.get_avg_total_memory_usage_in_kilobytes()}
+        Average total size (kbytes): {self.get_avg_total_memory_usage_in_kilobytes()}
+        Maximum resident set size (kbytes): {self.get_max_resident_set_size_in_kilobytes()}
+        Average resident set size (kbytes): {self.get_avg_resident_set_size_in_kilobytes()}
+        Major (requiring I/O) page faults: {self.get_number_of_page_faults()}
+        Minor (reclaiming a frame) page faults: ?
+        Voluntary context switches: {self.get_number_of_voluntary_context_switches()}
+        Involuntary context switches: {self.get_number_of_involuntary_context_switches()}
+        Swaps: ?
+        File system inputs: {self.get_read_count()}
+        File system outputs: {self.get_write_count()}
+        Socket messages sent: ?
+        Socket messages received: ?
+        Signals delivered: ?
+        Page size (bytes): {self.get_page_size()}
+        Exit status: {self.exit_code}
+        """
 
 
 def run(
@@ -182,22 +216,22 @@ def process_custom_format_str(format_str: str, process_info: ProcessInfo) -> str
     ret_str = ret_str.replace("%D", f"{process_info.get_avg_total_memory_usage_in_kilobytes()}")
     ret_str = ret_str.replace("%p", f"{process_info.get_avg_total_memory_usage_in_kilobytes()}")
     ret_str = ret_str.replace("%X", f"{process_info.get_avg_size_of_shared_text_space_in_kilobytes()}")
-    ret_str = ret_str.replace("%Z", str(mmap.PAGESIZE))
+    ret_str = ret_str.replace("%Z", str(process_info.get_page_size()))
     ret_str = ret_str.replace("%F", f"{process_info.get_number_of_page_faults()}")
     # %R would be minor/recoverable page faults... can't currently get this via psutil
-    ret_str = ret_str.replace("%R", "0")
+    ret_str = ret_str.replace("%R", "?")
     # %W would be number of times process was swapped out of main memory... can't currently get this via psutil
-    ret_str = ret_str.replace("%W", "0")
+    ret_str = ret_str.replace("%W", "?")
     ret_str = ret_str.replace("%c", f"{process_info.get_number_of_involuntary_context_switches()}")
     ret_str = ret_str.replace("%w", f"{process_info.get_number_of_voluntary_context_switches()}")
     ret_str = ret_str.replace("%I", f"{process_info.get_read_count()}")
     ret_str = ret_str.replace("%O", f"{process_info.get_write_count()}")
     # %r is sockets recv'd... can't currently get this via psutil
-    ret_str = ret_str.replace("%r", "0")
+    ret_str = ret_str.replace("%r", "?")
     # %s is sockets sent'd... can't currently get this via psutil
-    ret_str = ret_str.replace("%s", "0")
+    ret_str = ret_str.replace("%s", "?")
     # %k is number of signals sent to this process... can't currently get this via psutil
-    ret_str = ret_str.replace("%k", "0")
+    ret_str = ret_str.replace("%k", "?")
     ret_str = ret_str.replace("%C", f"{shlex.join(process_info.cmd)}")
     ret_str = ret_str.replace("%x", f"{process_info.exit_code}")
 
@@ -205,7 +239,7 @@ def process_custom_format_str(format_str: str, process_info: ProcessInfo) -> str
     try:
         ret_str = ret_str.replace(
             "%P",
-            f"{int((process_info.get_user_time() + process_info.get_sys_time()) / process_info.run_time) * 100}%",
+            f"{process_info.get_percentage_of_cpu_this_job_got()}%",
         )
     except ZeroDivisionError:
         ret_str = ret_str.replace("%P", "0%")
@@ -215,7 +249,8 @@ def process_custom_format_str(format_str: str, process_info: ProcessInfo) -> str
 
 def main():
     parser = argparse.ArgumentParser(
-        description="A pseudo-port of GNU time to Python. You can look at the man page of time to get some info about the args here."
+        description="""A pseudo-port of GNU time to Python. You can look at the man page of time to get some info about the args here.
+        Certain format codes are not supported and will return a ? in place of an actual value."""
     )
     parser.add_argument("cmd", nargs=argparse.REMAINDER, help="The command to time.")
     parser.add_argument("-p", dest="use_portable_format", action="store_true", help="Use the portable output format.")
@@ -274,7 +309,7 @@ def main():
             process_info = run(args.cmd, args.gnu_mode, quiet=args.quiet, output=output)
 
             if args.verbose:
-                pass
+                print(str(process_info), end="", file=output)
             elif args.use_portable_format:
                 print(
                     f"real {process_info.run_time:.2f}\nuser {process_info.get_user_time():.2f}\nsys {process_info.get_sys_time():.2f}",
