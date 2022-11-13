@@ -1,6 +1,8 @@
 # Timey
 
-Timey is a pseudo-port of GNU Time, written in Python
+Timey is a pseudo-port of GNU Time, written in Python. The output generally looks like `time`.
+
+Certain format codes may not work exactly like they do in GNU `time`.
 
 # Installation
 
@@ -48,3 +50,16 @@ optional arguments:
                         command.
 ```
 <!-- MARKDOWN-AUTO-DOCS:END -->
+
+# Simple Example
+
+Timey can be used to time function execution (just like the time command):
+
+```
+> timey echo "Hello World"
+Hello World
+
+real    0m0.007s
+user    0m0.000s
+sys     0m0.000s
+```
