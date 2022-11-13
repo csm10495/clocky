@@ -156,9 +156,6 @@ def seconds_to_time_str(secs: float, gnu_elapsed_real_time=False) -> str:
     if gnu_elapsed_real_time:
         # this dot logic is funky.. but i can't figure out the right way to get
         # 0.0 to be 00.0 to match gnu format
-        if "." not in str(remaining_secs):
-            remaining_secs = "0.0"
-
         before_dot, after_dot = f"{remaining_secs:.2f}".split(".")
         if len(before_dot) == 1:
             before_dot = "0" + before_dot
