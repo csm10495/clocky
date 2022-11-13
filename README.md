@@ -17,8 +17,7 @@ Timey can be run via `timey` or `python -m timey`
 <!-- MARKDOWN-AUTO-DOCS:START (CODE:src=./help_output.txt) -->
 <!-- The below code snippet is automatically added from ./help_output.txt -->
 ```txt
-usage: __main__.py [-h] [-p] [-o OUTPUT] [-f FORMAT] [-a] [-v] [-q] [-V] [-g]
-                   ...
+usage: timey [-h] [-p] [-o OUTPUT] [-f FORMAT] [-a] [-v] [-q] [-V] [-g] ...
 
 A pseudo-port of GNU time to Python. You can look at the man page of time to
 get some info about the args here.
