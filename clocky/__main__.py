@@ -184,8 +184,14 @@ def run(
 
 
 def seconds_to_time_str(secs: float, gnu_elapsed_real_time=False) -> str:
-    # todo: handle hours if more than 60 min
-    minutes, remaining_secs = divmod(secs, 60)
+    """
+    Takes the given number of seconds and converts it into a time string.
+
+    If gnu_elapsed_real_time, return via the [hours:]minutes:seconds format.
+    Otherwise, return via the [<hrs>h]<min>m<sec>s format
+    """
+    hours, remaining_sec_after_hour = divmod(secs, 3600)
+    minutes, remaining_secs = divmod(remaining_sec_after_hour, 60)
 
     if gnu_elapsed_real_time:
         # this dot logic is funky.. but i can't figure out the right way to get
@@ -194,9 +200,15 @@ def seconds_to_time_str(secs: float, gnu_elapsed_real_time=False) -> str:
         if len(before_dot) == 1:
             before_dot = "0" + before_dot
 
-        ret_str = f"{int(minutes)}:{before_dot}.{after_dot}"
+        if hours:
+            ret_str = f"{int(hours)}:{str(int(minutes)).zfill(2)}:{before_dot}.{after_dot}"
+        else:
+            ret_str = f"{int(minutes)}:{before_dot}.{after_dot}"
     else:
-        ret_str = f"{int(minutes)}m{remaining_secs:.3f}s"
+        if hours:
+            ret_str = f"{int(hours)}h{int(minutes)}m{remaining_secs:.3f}s"
+        else:
+            ret_str = f"{int(minutes)}m{remaining_secs:.3f}s"
 
     return ret_str
 
