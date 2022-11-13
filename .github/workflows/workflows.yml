@@ -18,7 +18,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install setuptools wheel twine
           pip install .
-          python -m timey --help > _help_output.txt
+          python -m timey --help > help_output.txt
       - name: Markdown autodocs
         uses: dineshsonachalam/markdown-autodocs@v1.0.7
 
