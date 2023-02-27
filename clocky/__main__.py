@@ -13,7 +13,7 @@ from typing import List, Optional
 
 import psutil
 
-from . import __version__
+from clocky import __version__
 
 GNU_TIME_DEFAULT_FORMAT_STRING = (
     "%Uuser %Ssystem %Eelapsed %PCPU (%Xtext+%Ddata %Mmax)k\n%Iinputs+%Ooutputs (%Fmajor+%Rminor)pagefaults %Wswaps"
