@@ -28,7 +28,7 @@ will return a ? in place of an actual value.
 positional arguments:
   cmd                   The command to time.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -p                    Use the portable output format.
   -o OUTPUT, --output OUTPUT
