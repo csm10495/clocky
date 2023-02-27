@@ -30,7 +30,6 @@ setup(
         "Operating System :: Microsoft :: Windows",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
     ],
     entry_points={"console_scripts": ["clocky = clocky.__main__:main"]},
     include_package_data=True,
