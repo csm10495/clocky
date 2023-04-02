@@ -122,6 +122,26 @@ class ProcessInfo:
         """
 
 
+def _better_which(path: str) -> Optional[str]:
+    """
+    See https://discuss.python.org/t/shutil-which-will-a-full-path-but-without-an-extension-on-windows/25372
+    for a full explanation of why this is needed.
+
+    The tldr is that shutil.which doesn't check for executables given without an extension (though listed in PATHEXT)
+    """
+    if shutil.which(path):
+        return path
+
+    if os.name == "nt":
+        extensions = os.environ.get("PATHEXT", "").split(";")
+        for ext in extensions:
+            t = path + ext
+            if shutil.which(t):
+                return t
+
+    return None
+
+
 def run(
     cmd: List[str],
     gnu_mode: bool = False,
@@ -138,7 +158,7 @@ def run(
     exit_code = 0
 
     if cmd:
-        if shutil.which(cmd[0]):
+        if _better_which(cmd[0]):
             proc = psutil.Popen(cmd)
 
             while proc.is_running():
