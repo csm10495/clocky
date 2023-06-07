@@ -9,6 +9,9 @@ MODULE_FOLDER = (THIS_FOLDER / THIS_FOLDER.name).resolve()
 sys.path.append(str(MODULE_FOLDER))
 from __init__ import __version__
 
+sys.path.remove(str(MODULE_FOLDER))
+
+
 req = ["psutil"]
 
 setup(
