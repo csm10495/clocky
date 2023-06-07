@@ -178,11 +178,14 @@ def run(
                     # reset counter time
                     next_counters_time = time.time() + counter_time_sec
 
-                time.sleep(0.001)
+                # Done to allow a moment of yield
+                time.sleep(.00001)
 
             death_time = time.time()
             exit_code = proc.wait()
-            run_time = death_time - proc.create_time()
+
+            # due to (seemingly) rounding a really fast process could lead to a negative runtime.
+            run_time = max(0, death_time - proc.create_time())
         else:
             print(f"{cmd[0]}: command not found", file=output)
 
